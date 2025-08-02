@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+.bg-dark-gray {
+  background-color: #1a1a1a;
+}
+
+.bg-light-gray-card {
+  background-color: #2b2b2b;
+}
+
+.bg-dashboard {
+  background-color: #121212;
+}
+
 .bg-custom-beige {
   background-color: #f8f6f1;
 }
