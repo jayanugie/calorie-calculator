@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import LoginView from "../views/LoginView.vue";
 import RegisterView from "../views/RegisterView.vue";
+import DashboardView from "../views/DashboardView.vue";
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -14,6 +15,11 @@ const router = createRouter({
       path: "/register",
       name: "RegisterView",
       component: RegisterView,
+    },
+    {
+      path: "/home",
+      name: "DashboardView",
+      component: DashboardView,
     },
   ],
 });

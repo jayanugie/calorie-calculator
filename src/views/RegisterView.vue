@@ -44,13 +44,16 @@
 
           <form class="space-y-4">
             <div>
-              <label for="nama" class="block text-sm font-medium text-gray-700"
+              <label
+                for="fullName"
+                class="block text-sm font-medium text-gray-700"
                 >Nama</label
               >
               <input
+                v-model="fullName"
                 type="text"
-                id="nama"
-                name="nama"
+                id="fullName"
+                name="fullName"
                 placeholder="Masukkan nama anda"
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
@@ -58,14 +61,15 @@
 
             <div>
               <label
-                for="tinggi_badan"
+                for="height"
                 class="block text-sm font-medium text-gray-700"
                 >Tinggi Badan</label
               >
               <input
+                v-model="height"
                 type="text"
-                id="tinggi_badan"
-                name="tinggi_badan"
+                id="height"
+                name="height"
                 placeholder="Masukkan tinggi badan anda"
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
@@ -73,50 +77,33 @@
 
             <div>
               <label
-                for="berat_badan"
+                for="weight"
                 class="block text-sm font-medium text-gray-700"
                 >Berat Badan</label
               >
               <input
+                v-model="weight"
                 type="text"
-                id="berat_badan"
-                name="berat_badan"
+                id="weight"
+                name="weight"
                 placeholder="Masukkan berat badan anda"
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
             </div>
 
             <div>
-              <label
-                for="tanggal_lahir"
-                class="block text-sm font-medium text-gray-700"
+              <label for="dob" class="block text-sm font-medium text-gray-700"
                 >Tanggal Lahir</label
               >
               <div class="relative mt-1">
                 <input
-                  type="text"
-                  id="tanggal_lahir"
-                  name="tanggal_lahir"
+                  v-model="dob"
+                  type="date"
+                  id="dob"
+                  name="dob"
                   placeholder="dd-mm-yyyy"
-                  class="block w-full px-3 py-2 pr-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  class="block w-full px-3 py-2 pr-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 />
-                <span
-                  class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-gray-400"
-                >
-                  <svg
-                    class="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    />
-                  </svg>
-                </span>
               </div>
             </div>
 
@@ -125,6 +112,7 @@
                 >Email</label
               >
               <input
+                v-model="email"
                 type="email"
                 id="email_reg"
                 name="email_reg"
@@ -141,6 +129,7 @@
               >
               <div class="relative mt-1">
                 <input
+                  v-model="password"
                   type="password"
                   id="password_reg"
                   name="password_reg"
@@ -180,10 +169,11 @@
               <div class="mt-1 flex space-x-4">
                 <div class="flex items-center">
                   <input
+                    v-model="gender"
                     id="gender_pria"
                     name="gender"
                     type="radio"
-                    value="pria"
+                    value="Male"
                     class="focus:ring-orange-500 h-4 w-4 text-orange-600 border-gray-300"
                   />
                   <label for="gender_pria" class="ml-2 block text-gray-900">
@@ -192,10 +182,11 @@
                 </div>
                 <div class="flex items-center">
                   <input
+                    v-model="gender"
                     id="gender_wanita"
                     name="gender"
                     type="radio"
-                    value="wanita"
+                    value="Female"
                     class="focus:ring-orange-500 h-4 w-4 text-orange-600 border-gray-300"
                   />
                   <label for="gender_wanita" class="ml-2 block text-gray-900">
@@ -207,6 +198,7 @@
 
             <div class="pt-4">
               <button
+                @click.prevent="handleRegister"
                 type="submit"
                 class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
               >
@@ -223,3 +215,51 @@
     </div>
   </div>
 </template>
+
+<script>
+import axios from "axios";
+
+export default {
+  name: "RegisterView",
+  data() {
+    return {
+      fullName: "",
+      height: "",
+      weight: "",
+      dob: "",
+      email: "",
+      password: "",
+      gender: "",
+    };
+  },
+  methods: {
+    async handleRegister() {
+      try {
+        const response = await axios.post(
+          `${this.API_BASE_URL}/api/auth/register`,
+          {
+            fullName: this.fullName,
+            height: this.height,
+            weight: this.weight,
+            dob: this.dob,
+            email: this.email,
+            password: this.password,
+            username: this.email,
+            gender: this.gender,
+          }
+        );
+        const responseData = response.data.meta_data;
+        if (responseData.status !== 200) {
+          alert(responseData.message);
+          return;
+        } else {
+          alert(responseData.message);
+          this.$router.push("/");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    },
+  },
+};
+</script>

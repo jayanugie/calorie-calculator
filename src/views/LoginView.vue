@@ -34,6 +34,7 @@
                 >Login</label
               >
               <input
+                v-model="email"
                 type="email"
                 id="email"
                 name="email"
@@ -50,6 +51,7 @@
               >
               <div class="relative mt-1">
                 <input
+                  v-model="password"
                   type="password"
                   id="password"
                   name="password"
@@ -85,6 +87,7 @@
             <div class="flex items-center justify-between text-sm">
               <div class="flex items-center">
                 <input
+                  v-model="rememberMe"
                   id="remember_me"
                   name="remember_me"
                   type="checkbox"
@@ -101,6 +104,7 @@
 
             <div>
               <button
+                @click.prevent="handleLogin"
                 type="submit"
                 class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
               >
@@ -130,7 +134,40 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "LoginView",
+  data() {
+    return {
+      email: "",
+      password: "",
+      rememberMe: false,
+      error: null,
+    };
+  },
+  methods: {
+    async handleLogin() {
+      try {
+        const response = await axios.post(
+          `${this.API_BASE_URL}/api/auth/login`,
+          {
+            email: this.email,
+            password: this.password,
+          }
+        );
+        const responseData = response.data.meta_data;
+        if (responseData.status !== 200) {
+          alert(responseData.message);
+          return;
+        } else {
+          alert(responseData.message);
+          this.$router.push("/home");
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    },
+  },
 };
 </script>
