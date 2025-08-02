@@ -157,18 +157,23 @@ export default {
           }
         );
 
-        const responseData = loginResponse.data.meta_data;
+        console.log("Login Response", loginResponse);
+        const responseMetaData = loginResponse.data.meta_data;
+        const responseData = loginResponse.data.data;
+        const responseUserData = loginResponse.data.data.user;
 
-        if (responseData.status !== 200) {
-          alert(responseData.message);
+        if (responseMetaData.status !== 200) {
+          alert(responseMetaData.message);
           return;
         }
 
-        alert(responseData.message);
+        alert(responseMetaData.message);
 
         const fatsecretToken = await this.getFatSecretToken();
 
         localStorage.setItem("fatsecret_token", fatsecretToken);
+        localStorage.setItem("caloriecalc_token", responseData.token);
+        localStorage.setItem("username", responseUserData.username);
 
         this.$router.push("/dashboard");
       } catch (err) {

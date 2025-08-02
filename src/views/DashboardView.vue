@@ -5,7 +5,7 @@
       <main class="flex-1 p-6 space-y-6 overflow-y-auto lg:px-40">
         <header class="flex items-center justify-between pb-4">
           <div>
-            <h1 class="text-2xl font-bold">Halo, user1234</h1>
+            <h1 class="text-2xl font-bold">Halo, {{ username }}</h1>
             <p class="text-gray-400">
               Anda dapat memantau aktivitas Anda di sini
             </p>
@@ -58,6 +58,11 @@ export default {
     DailyTarget,
     RecipeOfTheDay,
     YourActivities,
+  },
+  data() {
+    return {
+      username: localStorage.getItem("username").match(/^[^@]+/)[0] || "User",
+    };
   },
 };
 </script>
