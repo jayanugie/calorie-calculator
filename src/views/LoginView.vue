@@ -149,23 +149,55 @@ export default {
   methods: {
     async handleLogin() {
       try {
-        const response = await axios.post(
+        const loginResponse = await axios.post(
           `${this.API_BASE_URL}/api/auth/login`,
           {
             email: this.email,
             password: this.password,
           }
         );
-        const responseData = response.data.meta_data;
+
+        const responseData = loginResponse.data.meta_data;
+
         if (responseData.status !== 200) {
           alert(responseData.message);
           return;
-        } else {
-          alert(responseData.message);
-          this.$router.push("/home");
         }
+
+        alert(responseData.message);
+
+        const fatsecretToken = await this.getFatSecretToken();
+
+        localStorage.setItem("fatsecret_token", fatsecretToken);
+
+        this.$router.push("/dashboard");
       } catch (err) {
-        console.error(err);
+        console.error("Login error:", err);
+        this.error = "Gagal login. Silakan coba lagi.";
+      }
+    },
+
+    async getFatSecretToken() {
+      try {
+        const response = await axios.post(
+          "/auth/connect/token", // proxy path
+          new URLSearchParams({
+            grant_type: "client_credentials",
+            client_id: "8b4d41fa4d164cae80ecf660e75d287b",
+            client_secret: "2bae2af2808c4c8b971c6e2f686de17e",
+            scope: "basic",
+          }),
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+          }
+        );
+
+        return response.data.access_token;
+      } catch (error) {
+        console.error("Gagal mengambil token FatSecret:", error);
+        return null;
       }
     },
   },
